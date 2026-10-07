@@ -1,0 +1,50 @@
+
+ usuario_id | nombre          | pais    | plan
+------------+-----------------+---------+----------
+       u116 | Carlos Castillo | Managua | familiar
+
+(1 rows)
+
+ reproducida_en                  | titulo          | artista
+---------------------------------+-----------------+---------------
+ 2026-09-30 19:25:52.000000+0000 |   Ciudad ciudad |   Tiempo Trío
+ 2026-09-30 12:38:01.000000+0000 |   Tiempo lluvia |     Cielo Sur
+ 2026-09-29 13:02:36.000000+0000 |      Mar volcán |    Cielo Trío
+ 2026-09-28 21:52:44.000000+0000 |       Sueño sol |       Mar Sur
+ 2026-09-28 17:27:22.000000+0000 | Horizonte sueño |   Ciudad Band
+ 2026-09-27 19:47:38.000000+0000 |    Noche viento |     Luna Band
+ 2026-09-27 17:11:48.000000+0000 |    Fuego tiempo |    Volcán Sur
+ 2026-09-26 13:07:07.000000+0000 |    Sueño ciudad | Horizonte Sur
+ 2026-09-26 09:24:41.000000+0000 |    Lluvia fuego |    Sueño Band
+ 2026-09-23 12:00:59.000000+0000 |   Camino lluvia |    Tiempo Sur
+
+(10 rows)
+
+ posicion | titulo           | artista
+----------+------------------+---------------
+        1 |      Sueño fuego |     Cielo Sur
+        2 |       Cielo luna |   Tiempo Club
+        3 | Horizonte ciudad |   Tiempo Trío
+        4 |          Eco mar |   Tiempo Band
+        5 |       Río lluvia |  Camino Norte
+        6 |     Fuego ciudad |     Cielo Sur
+        7 |          Río sol |      Luna Sur
+        8 |        Cielo río |      Mar Band
+        9 | Volcán horizonte |    Cielo Band
+       10 |          Eco sol | Horizonte Sur
+       11 |     Volcán cielo |     Fuego Sur
+       12 |      Fuego cielo |   Tiempo Club
+       13 |       Noche luna |    Sueño Band
+       14 |       Río ciudad |       Mar Sur
+       15 |        Eco fuego |    Volcán Sur
+       16 |         Río luna |   Lluvia Club
+       17 |     Fuego ciudad |    Cielo Band
+       18 |     Noche lluvia |  Volcán Norte
+
+(18 rows)
+
+ reproducciones
+----------------
+              5
+
+(1 rows)

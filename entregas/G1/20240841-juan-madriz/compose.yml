@@ -1,0 +1,76 @@
+# =============================================================================
+#  Taller Apache Cassandra 5.0 - Big Data, UFM 2026 S2
+#
+#  Parte 2: queda solo el servicio del nodo de esta laptop dentro del cluster
+#  del grupo 1. Aqui vive cassandra1, el nodo semilla (seed): el punto de
+#  contacto de cassandra2 y cassandra3 para unirse al cluster.
+#
+#  Las tres laptops se ven entre si por Tailscale (VPN): cada una tiene una
+#  IP 100.x fija que funciona desde cualquier red, sin depender del hotspot.
+#    laptop 1 (esta)  100.78.221.21   cassandra1  <- semilla
+#    laptop 2         100.127.202.84  cassandra2  (victors-macbook-pro)
+#    laptop 3         100.92.165.6    cassandra3  (sofis-macbook-air)
+#
+#  Los datos viven en volumenes con nombre y sobreviven a "docker compose down".
+# =============================================================================
+name: taller-cassandra
+
+services:
+
+  # ---------------------------------------------------------------------------
+  # CASSANDRA1 -> desde tu maquina es localhost:9042 (protocolo CQL)
+  #
+  # En Cassandra no hay NameNode ni controller: todos los nodos son iguales.
+  # Cualquiera recibe una consulta y la reparte (es el "coordinador").
+  # La semilla no manda: solo es la direccion conocida donde los otros dos
+  # nodos se presentan la primera vez. Despues todos se cuentan entre si
+  # quien esta vivo (gossip).
+  # ---------------------------------------------------------------------------
+  cassandra1:
+    image: cassandra:5.0.8
+    container_name: cassandra1
+    hostname: cassandra1
+    ports:
+      # 9042: CQL, para cqlsh.
+      - "9042:9042"
+      # 7000: comunicacion entre nodos (gossip). Sin este puerto publicado,
+      # cassandra2 y cassandra3 no alcanzan a este nodo desde sus laptops.
+      - "7000:7000"
+    environment:
+      # Memoria de Java para este nodo. Las dos variables van juntas.
+      # MAX_HEAP_SIZE minimo: 256M.
+      MAX_HEAP_SIZE: 512M
+      HEAP_NEWSIZE: 128M
+
+      # Nombre del cluster del grupo: los tres nodos tienen que declarar el
+      # mismo, o el que no coincida se niega a unirse.
+      CASSANDRA_CLUSTER_NAME: UFM-G1
+
+      # IP de ESTA laptop en la red del grupo. Es la direccion que el nodo
+      # anuncia a los demas; sin ella anunciaria su IP interna de Docker
+      # (172.x), que no existe fuera de esta laptop.
+      CASSANDRA_BROADCAST_ADDRESS: 100.78.221.21
+
+      # Semilla del cluster: la IP de la laptop de cassandra1, que es esta
+      # misma. Los tres nodos apuntan a esta direccion.
+      CASSANDRA_SEEDS: 100.78.221.21
+
+      # Snitch que lee el datacenter y el rack de cassandra-rackdc.properties,
+      # es decir de las dos variables siguientes. El de la Parte 1
+      # (SimpleSnitch) reporta todo como "datacenter1" e ignora lo que se
+      # configure aqui.
+      CASSANDRA_ENDPOINT_SNITCH: GossipingPropertyFileSnitch
+      CASSANDRA_DC: dc-g1
+      CASSANDRA_RACK: rack1
+    volumes:
+      - cassandra1-data:/var/lib/cassandra
+      # Los CSV del repo quedan dentro del contenedor en /data (solo lectura).
+      - ./data:/data:ro
+
+# -----------------------------------------------------------------------------
+# Volumenes con nombre: aqui viven los datos de cada nodo.
+#   docker compose down      -> los conserva
+#   docker compose down -v   -> LOS BORRA (solo para empezar de cero)
+# -----------------------------------------------------------------------------
+volumes:
+  cassandra1-data:
